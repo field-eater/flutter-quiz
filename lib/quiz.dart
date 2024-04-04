@@ -16,12 +16,7 @@ class _QuizState extends State<Quiz> {
   // Widget? activeScreen;
   var activeScreen = 'home-screen';
   List<String> selectedAnswers = [];
-
-  // void initState() {
-  //   // TODO: implement initState
-  //   activeScreen = HomeScreen(switchScreen);
-  //   super.initState();
-  // }
+  List futureQuestions = [];
 
   void switchScreen() {
     setState(() {
@@ -33,7 +28,7 @@ class _QuizState extends State<Quiz> {
     selectedAnswers.add(answer);
     // questionsData.length
 
-    if (selectedAnswers.length == 10) {
+    if (selectedAnswers.length == futureQuestions.length) {
       setState(() {
         activeScreen = 'results-screen';
       });
@@ -48,12 +43,20 @@ class _QuizState extends State<Quiz> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _init();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget screenWidget = HomeScreen(switchScreen);
 
     if (activeScreen == 'questions-screen') {
       screenWidget = QuestionsScreen(
         onSelectAnswer: chooseAnswer,
+        questions: futureQuestions,
       );
     }
 
@@ -61,6 +64,7 @@ class _QuizState extends State<Quiz> {
       screenWidget = ResultsScreen(
         chosenAnswers: selectedAnswers,
         restartQuiz: restartQuiz,
+        questions: futureQuestions,
       );
     }
 
@@ -80,5 +84,15 @@ class _QuizState extends State<Quiz> {
             child: screenWidget),
       ),
     );
+  }
+
+  _init() async {
+    futureQuestions = await fetchQuestion();
+
+    setState(() {});
+
+    futureQuestions.forEach((element) async {
+      print(element.answers);
+    });
   }
 }

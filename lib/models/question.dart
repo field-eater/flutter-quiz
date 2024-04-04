@@ -2,7 +2,7 @@ class Question {
   final String question;
   final String correctAnswer;
   final List<dynamic> incorrectAnswers;
-  final List<String> answers;
+  List<String> answers;
 
   Question({
     required this.question,
@@ -14,23 +14,19 @@ class Question {
   List<String> getShuffledAnswers() {
     final shuffledList = List.of(answers);
     shuffledList.shuffle();
-    return shuffledList;
+    return shuffledList as List<String>;
   }
 
   factory Question.fromJson(Map<String, dynamic> json) {
     List<String> tempAnswers = [];
+    List allAnswers = List.of(json['incorrect_answers']);
 
-    // List<Question> questionPool = [];
-    // json.forEach((el) {
-    //   questionPool.add(Question(
-    //       question: el['question'],
-    //       correctAnswer: el['correct_answer'],
-    //       incorrectAnswers: el['incorrect_answers'],
-    //       answers: []));
-    // });
+    allAnswers.insert(0, json['correct_answer']);
 
-    // // json.forEach((answer) => tempAnswers.add(answer));
-    // // tempAnswers = List.from(json);
+    for (var answer in allAnswers) {
+      tempAnswers.add(answer);
+    }
+
     // return questionPool;
     return Question(
       question: json['question'],

@@ -30,5 +30,3 @@ Future<List<Question>> fetchQuestion() async {
     throw Exception('Failed to load question');
   }
 }
-
-var questionsData = fetchQuestion();
