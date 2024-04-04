@@ -16,8 +16,8 @@ class ResultsScreen extends StatelessWidget {
     for (var i = 0; i < chosenAnswers.length; i++) {
       summary.add({
         'question_index': i,
-        'question': questionsData[i].text,
-        'correct_answer': questionsData[i].answers[0],
+        'question': i,
+        'correct_answer': i,
         'user_answer': chosenAnswers[i],
       });
     }
@@ -28,7 +28,7 @@ class ResultsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final summaryData = getSummaryData();
-    final numTotalQuestions = questionsData.length;
+    final numTotalQuestions = 10;
 
     final numCorrectQuestions = summaryData.where((question) {
       return question['user_answer'] == question['correct_answer'];

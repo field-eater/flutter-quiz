@@ -1,55 +1,34 @@
+import 'dart:convert';
 import 'package:adv_basics/models/question.dart';
+import 'package:http/http.dart' as http;
 
-const questionsData = [
-  Question(
-    'What are the main building blocks of Flutter UIs?',
-    [
-      'Widgets',
-      'Components',
-      'Blocks',
-      'Functions',
-    ],
-  ),
-  Question('How are Flutter UIs built?', [
-    'By combining widgets in code',
-    'By combining widgets in a visual editor',
-    'By defining widgets in config files',
-    'By using XCode for iOS and Android Studio for Android',
-  ]),
-  Question(
-    'What\'s the purpose of a StatefulWidget?',
-    [
-      'Update UI as data changes',
-      'Update data as UI changes',
-      'Ignore data changes',
-      'Render UI that does not depend on data',
-    ],
-  ),
-  Question(
-    'Which widget should you try to use more often: StatelessWidget or StatefulWidget?',
-    [
-      'StatelessWidget',
-      'StatefulWidget',
-      'Both are equally good',
-      'None of the above',
-    ],
-  ),
-  Question(
-    'What happens if you change data in a StatelessWidget?',
-    [
-      'The UI is not updated',
-      'The UI is updated',
-      'The closest StatefulWidget is updated',
-      'Any nested StatefulWidgets are updated',
-    ],
-  ),
-  Question(
-    'How should you update data inside of StatefulWidgets?',
-    [
-      'By calling setState()',
-      'By calling updateData()',
-      'By calling updateUI()',
-      'By calling updateState()',
-    ],
-  ),
-];
+Future<List<Question>> fetchQuestion() async {
+  final response = await http.get(Uri.parse(
+      'https://opentdb.com/api.php?amount=10&category=20&difficulty=easy&type=multiple'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+
+    final jsonRes = jsonDecode(response.body)['results'];
+
+    List<Question> questionsResult = [];
+
+    // jsonRes.forEach((el) {
+    //   questionsResult.add(Question.fromJson(el));
+    //   // print(el);
+    // });
+
+    for (var el in jsonRes) {
+      questionsResult.add(Question.fromJson(el));
+    }
+
+    // then parse the JSON.
+    return questionsResult;
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load question');
+  }
+}
+
+var questionsData = fetchQuestion();

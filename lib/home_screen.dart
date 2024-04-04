@@ -1,12 +1,14 @@
+import 'package:adv_basics/models/question.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 var logoPath = 'assets/images/quiz-logo.png';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen(this.startQuiz, {super.key});
-
+  HomeScreen(this.startQuiz, {super.key});
+  late Future<Question> futureQuestions;
   final void Function() startQuiz;
+
   @override
   Widget build(BuildContext context) {
     return Center(
