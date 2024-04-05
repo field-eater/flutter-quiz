@@ -32,9 +32,8 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
 
     final currentQuestion = widget.questions[currentQuestionIndex];
 
-    return Scaffold(
-      body: Center(
-          child: SizedBox(
+    return Center(
+      child: SizedBox(
         width: double.infinity,
         child: Container(
           margin: const EdgeInsets.all(40),
@@ -65,7 +64,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
             ],
           ),
         ),
-      )),
+      ),
     );
   }
 }

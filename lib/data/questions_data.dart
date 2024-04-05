@@ -9,7 +9,7 @@ Future<List<Question>> fetchQuestion() async {
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
 
-    final jsonRes = jsonDecode(response.body)['results'];
+    final jsonRes = json.decode(utf8.decode(response.bodyBytes))['results'];
 
     List<Question> questionsResult = [];
 
