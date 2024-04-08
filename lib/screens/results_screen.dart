@@ -36,9 +36,6 @@ class ResultsScreen extends StatelessWidget {
             numTotalQuestions = questionsData.length;
 
             for (var i = 0; i < numTotalQuestions; i++) {
-              // var answers = context.watch<QuestionProvider>().getAnswers(
-              //     questionsData[i].incorrectAnswers,
-              //     questionsData[i].correctAnswer);
               summary.add({
                 'question_index': i,
                 'question': questionsData[i].question,
@@ -78,7 +75,7 @@ class ResultsScreen extends StatelessWidget {
                   icon: const Icon(
                     Icons.refresh,
                   ),
-                  onPressed: Provider.of<QuizProvider>(context).restartQuiz,
+                  onPressed: context.watch<QuizProvider>().restartQuiz,
                   label: const Text(
                     'Restart Quiz!',
                     style: TextStyle(color: Colors.white),

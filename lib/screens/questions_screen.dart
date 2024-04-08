@@ -51,6 +51,11 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                         var currentQuestion =
                             question.data![currentQuestionIndex];
 
+                        final answers = context
+                            .watch<QuestionProvider>()
+                            .getAnswers(currentQuestion.incorrectAnswers,
+                                currentQuestion.correctAnswer);
+
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +71,15 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                             const SizedBox(
                               height: 30,
                             ),
-                            ...currentQuestion.answers.map((answer) {
+                            // ...currentQuestion.answers.map((answer) {
+                            //   return AnswerButton(
+                            //     answerText: answer,
+                            //     onTap: () {
+                            //       answerQuestion(answer);
+                            //     },
+                            //   );
+                            // }),
+                            ...answers.map((answer) {
                               return AnswerButton(
                                 answerText: answer,
                                 onTap: () {
