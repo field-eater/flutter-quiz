@@ -1,9 +1,16 @@
-import 'package:adv_basics/data/questions_data.dart';
-import 'package:adv_basics/home_screen.dart';
-import 'package:adv_basics/questions_screen.dart';
-import 'package:adv_basics/results_screen.dart';
+import 'dart:async';
+
+import 'package:adv_basics/providers/question_provider.dart';
+
+import 'package:adv_basics/models/question.dart';
+import 'package:adv_basics/providers/quiz_provider.dart';
+import 'package:adv_basics/screens/home_screen.dart';
+import 'package:adv_basics/screens/questions_screen.dart';
+import 'package:adv_basics/screens/results_screen.dart';
+import 'package:adv_basics/services/question_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+import 'package:provider/provider.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -13,56 +20,23 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  // Widget? activeScreen;
-  var activeScreen = 'home-screen';
-  List<String> selectedAnswers = [];
+  late Future<List<Question>> futureQuestions;
 
-  // void initState() {
-  //   // TODO: implement initState
-  //   activeScreen = HomeScreen(switchScreen);
-  //   super.initState();
-  // }
-
-  void switchScreen() {
-    setState(() {
-      activeScreen = 'questions-screen';
-    });
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _init();
   }
 
-  void chooseAnswer(String answer) {
-    selectedAnswers.add(answer);
-
-    if (selectedAnswers.length == questionsData.length) {
-      setState(() {
-        activeScreen = 'results-screen';
-      });
-    }
-  }
-
-  void restartQuiz() {
-    setState(() {
-      selectedAnswers = [];
-      activeScreen = 'home-screen';
-    });
+  _init() {
+    futureQuestions =
+        Provider.of<QuestionProvider>(context, listen: false).getQuestions();
+    // futureQuestions.forEach((element) => element);
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget screenWidget = HomeScreen(switchScreen);
-
-    if (activeScreen == 'questions-screen') {
-      screenWidget = QuestionsScreen(
-        onSelectAnswer: chooseAnswer,
-      );
-    }
-
-    if (activeScreen == 'results-screen') {
-      screenWidget = ResultsScreen(
-        chosenAnswers: selectedAnswers,
-        restartQuiz: restartQuiz,
-      );
-    }
-
     return MaterialApp(
       home: Scaffold(
         body: Container(
@@ -76,7 +50,25 @@ class _QuizState extends State<Quiz> {
                 ],
               ),
             ),
-            child: screenWidget),
+            child: Consumer<QuizProvider>(
+              builder: (context, quiz, child) {
+                if (quiz.activeScreen == 'questions-screen') {
+                  return quiz.screenWidget = QuestionsScreen(
+                    questions: futureQuestions,
+                    onSelectAnswer: quiz.chooseAnswer,
+                  );
+                }
+
+                if (quiz.activeScreen == 'results-screen') {
+                  return quiz.screenWidget = ResultsScreen(
+                    questions: futureQuestions,
+                    chosenAnswers: quiz.selectedAnswers,
+                    restartQuiz: quiz.restartQuiz,
+                  );
+                }
+                return quiz.screenWidget = HomeScreen();
+              },
+            )),
       ),
     );
   }

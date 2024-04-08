@@ -1,15 +1,29 @@
+import 'package:flutter/material.dart';
+
 class Question {
-  const Question(
-    this.text,
-    this.answers,
-  );
+  Question({
+    required this.question,
+    required this.index,
+    required this.correctAnswer,
+    required this.answers,
+    // required this.incorrectAnswers,
+  });
+  final int index;
+  final String question;
+  final List<dynamic> answers;
+  // final List<String> incorrectAnswers;
+  final String correctAnswer;
 
-  final String text;
-  final List<String> answers;
+  factory Question.fromJson(Map<String, dynamic> json) {
+    List<String> answers = json['incorrect_answers'];
+    String correctAnswer = json['correct_answer'];
+    answers.insert(0, correctAnswer);
 
-  List<String> getShuffledAnswers() {
-    final shuffledList = List.of(answers);
-    shuffledList.shuffle();
-    return shuffledList;
+    return Question(
+      index: json.length,
+      question: json['question'],
+      correctAnswer: json['correct_answer'],
+      answers: answers,
+    );
   }
 }

@@ -1,12 +1,18 @@
+import 'package:adv_basics/providers/quiz_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 var logoPath = 'assets/images/quiz-logo.png';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen(this.startQuiz, {super.key});
+class HomeScreen extends StatefulWidget {
+  HomeScreen({super.key});
 
-  final void Function() startQuiz;
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -30,7 +36,7 @@ class HomeScreen extends StatelessWidget {
           height: 30,
         ),
         OutlinedButton.icon(
-          onPressed: startQuiz,
+          onPressed: Provider.of<QuizProvider>(context).switchScreen,
           icon: const Icon(Icons.arrow_right_alt),
           style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
