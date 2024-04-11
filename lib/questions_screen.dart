@@ -3,6 +3,7 @@ import 'package:adv_basics/models/question.dart';
 import 'package:flutter/material.dart';
 import 'package:adv_basics/data/questions_data.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen(
@@ -31,6 +32,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
     // print(futureQuestions);
 
     final currentQuestion = widget.questions[currentQuestionIndex];
+    var unescape = HtmlUnescape();
 
     return Center(
       child: SizedBox(
@@ -43,7 +45,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
             children: [
               Text(
                 // textAlign: TextAlign.center,
-                currentQuestion.question,
+                unescape.convert(currentQuestion.question),
                 style: GoogleFonts.lato(
                   color: const Color.fromARGB(255, 201, 153, 251),
                   fontSize: 24,
