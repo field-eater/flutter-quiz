@@ -35,6 +35,7 @@ class QuizProvider extends ChangeNotifier {
   }
 
   void restartQuiz() {
+    currentQuestionIndex = 0;
     selectedAnswers = [];
     activeScreen = 'home-screen';
 

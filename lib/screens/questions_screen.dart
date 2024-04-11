@@ -49,7 +49,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   @override
   Widget build(BuildContext context) {
     var currentQuestionIndex =
-        Provider.of<QuizProvider>(context).currentQuestionIndex;
+        Provider.of<QuizProvider>(context, listen: false).currentQuestionIndex;
 
     return SizedBox(
       width: double.infinity,
