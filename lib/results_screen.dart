@@ -2,6 +2,7 @@ import 'package:adv_basics/data/questions_data.dart';
 import 'package:adv_basics/questions_summary.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 class ResultsScreen extends StatelessWidget {
   const ResultsScreen(
@@ -12,11 +13,12 @@ class ResultsScreen extends StatelessWidget {
 
   List<Map<String, Object>> getSummaryData() {
     final List<Map<String, Object>> summary = [];
+    var unescape = HtmlUnescape();
 
     for (var i = 0; i < chosenAnswers.length; i++) {
       summary.add({
         'question_index': i,
-        'question': questionsData[i].text,
+        'question': unescape.convert(questionsData[i].text),
         'correct_answer': questionsData[i].answers[0],
         'user_answer': chosenAnswers[i],
       });

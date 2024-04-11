@@ -2,6 +2,7 @@ import 'package:adv_basics/answer_button.dart';
 import 'package:flutter/material.dart';
 import 'package:adv_basics/data/questions_data.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({required this.onSelectAnswer, super.key});
@@ -25,6 +26,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   @override
   Widget build(BuildContext context) {
     final currentQuestion = questionsData[currentQuestionIndex];
+    var unescape = HtmlUnescape();
 
     return SizedBox(
       width: double.infinity,
@@ -48,7 +50,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
             ),
             ...currentQuestion.getShuffledAnswers().map((answer) {
               return AnswerButton(
-                answerText: answer,
+                answerText: unescape.convert(answer),
                 onTap: () {
                   answerQuestion(answer);
                 },
