@@ -17,7 +17,7 @@ class QuestionsScreen extends StatefulWidget {
     required this.questions,
   });
 
-  final void Function(String answer) answerQuestion;
+  final void Function(String answer, int qLength) answerQuestion;
   late Future<List<Question>> questions;
 
   @override
@@ -27,6 +27,7 @@ class QuestionsScreen extends StatefulWidget {
 class _QuestionsScreenState extends State<QuestionsScreen> {
   Map<int, List<String>> answers = {};
   List<Question> finalQuestions = [];
+  late int length;
 
   @override
   void initState() {
@@ -37,12 +38,14 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
 
   _init() async {
     finalQuestions = await widget.questions;
+    length = finalQuestions.length;
     List<String> finalAnswers = [];
     for (int i = 0; i < finalQuestions.length; i++) {
       finalAnswers = Provider.of<QuestionProvider>(context, listen: false)
           .getAnswers(finalQuestions[i].incorrectAnswers,
               finalQuestions[i].correctAnswer);
       finalAnswers.shuffle();
+
       answers[i] = finalAnswers;
     }
   }
@@ -86,9 +89,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                           ),
                           ...answers[currentQuestionIndex]!.map((answer) {
                             return AnswerButton(
-                              answerText: answer,
+                              answerText: unescape.convert(answer),
                               onTap: () {
-                                widget.answerQuestion(answer);
+                                widget.answerQuestion(answer, length);
                               },
                             );
                           }),

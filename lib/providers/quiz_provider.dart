@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 
 class QuizProvider extends ChangeNotifier {
   var activeScreen = 'home-screen';
+
   var currentQuestionIndex = 0;
+
   List<String> selectedAnswers = [];
 
   Widget screenWidget = HomeScreen();
@@ -18,19 +20,18 @@ class QuizProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void chooseAnswer(String answer) {
+  void chooseAnswer(String answer, int questionLength) {
     selectedAnswers.add(answer);
-
-    if (selectedAnswers.length == 10) {
+    if (selectedAnswers.length == questionLength) {
       activeScreen = 'results-screen';
     }
     notifyListeners();
   }
 
-  void answerQuestion(String selectedAnswer) {
-    chooseAnswer(selectedAnswer);
-
+  void answerQuestion(String selectedAnswer, int questionLength) {
     currentQuestionIndex++;
+    chooseAnswer(selectedAnswer, questionLength);
+
     notifyListeners();
   }
 

@@ -21,6 +21,7 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   late Future<List<Question>> futureQuestions;
+  int qLength = 0;
 
   @override
   void initState() {
@@ -31,7 +32,7 @@ class _QuizState extends State<Quiz> {
     });
   }
 
-  _init() {
+  _init() async {
     futureQuestions =
         Provider.of<QuestionProvider>(context, listen: false).getQuestions();
     // futureQuestions.forEach((element) => element);

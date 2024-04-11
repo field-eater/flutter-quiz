@@ -23,6 +23,13 @@ class QuestionProvider extends ChangeNotifier {
     return _questions;
   }
 
+  Future<int> getQuestionLength() async {
+    final response = await getQuestions();
+    _questions = response;
+    notifyListeners();
+    return _questions.length;
+  }
+
   List<String> getAnswers(List<dynamic> incAnswers, String corAnswer) {
     final List<String> answers = incAnswers.cast();
     if (!answers.contains(corAnswer)) {
