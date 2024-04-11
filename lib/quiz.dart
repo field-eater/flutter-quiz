@@ -7,7 +7,7 @@ import 'package:adv_basics/providers/quiz_provider.dart';
 import 'package:adv_basics/screens/home_screen.dart';
 import 'package:adv_basics/screens/questions_screen.dart';
 import 'package:adv_basics/screens/results_screen.dart';
-import 'package:adv_basics/services/question_service.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -26,7 +26,9 @@ class _QuizState extends State<Quiz> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _init();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _init();
+    });
   }
 
   _init() {
@@ -55,7 +57,7 @@ class _QuizState extends State<Quiz> {
                 if (quiz.activeScreen == 'questions-screen') {
                   return quiz.screenWidget = QuestionsScreen(
                     questions: futureQuestions,
-                    onSelectAnswer: quiz.chooseAnswer,
+                    answerQuestion: quiz.answerQuestion,
                   );
                 }
 

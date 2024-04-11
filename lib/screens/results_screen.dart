@@ -25,64 +25,73 @@ class ResultsScreen extends StatelessWidget {
     int numTotalQuestions = 0;
     final List<Map<String, Object>> summary = [];
 
+    final restartQuiz = Provider.of<QuizProvider>(context).restartQuiz;
+
     return SizedBox(
       width: double.infinity,
       child: Container(
         margin: const EdgeInsets.all(40),
-        child: FutureBuilder(
+        child: FutureBuilder<List<Question>>(
           future: questions,
           builder: (context, question) {
-            questionsData = question.data!;
-            numTotalQuestions = questionsData.length;
+            if (question.hasData) {
+              questionsData = question.data!;
+              numTotalQuestions = questionsData.length;
 
-            for (var i = 0; i < numTotalQuestions; i++) {
-              summary.add({
-                'question_index': i,
-                'question': questionsData[i].question,
-                'correct_answer': questionsData[i].correctAnswer,
-                'user_answer': chosenAnswers[i],
-              });
+              for (var i = 0; i < numTotalQuestions; i++) {
+                summary.add({
+                  'question_index': i,
+                  'question': questionsData[i].question,
+                  'correct_answer': questionsData[i].correctAnswer,
+                  'user_answer': chosenAnswers[i],
+                });
+              }
+
+              final numCorrectQuestions = summary.where((question) {
+                return question['user_answer'] == question['correct_answer'];
+              }).length;
+
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'You answered $numCorrectQuestions out of $numTotalQuestions questions correctly!',
+                    // '$questionData',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.lato(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  QuestionsSummary(summaryData: summary),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                    ),
+                    icon: const Icon(
+                      Icons.refresh,
+                    ),
+                    onPressed: restartQuiz,
+                    label: const Text(
+                      'Restart Quiz!',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              );
+            } else {
+              return const Center(
+                widthFactor: double.minPositive,
+                child: CircularProgressIndicator(),
+              );
             }
-
-            final numCorrectQuestions = summary.where((question) {
-              return question['user_answer'] == question['correct_answer'];
-            }).length;
-
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'You answered $numCorrectQuestions out of $numTotalQuestions questions correctly!',
-                  // '$questionData',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.lato(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                QuestionsSummary(summaryData: summary),
-                const SizedBox(
-                  height: 15,
-                ),
-                TextButton.icon(
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                  ),
-                  icon: const Icon(
-                    Icons.refresh,
-                  ),
-                  onPressed: context.watch<QuizProvider>().restartQuiz,
-                  label: const Text(
-                    'Restart Quiz!',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )
-              ],
-            );
           },
         ),
       ),
