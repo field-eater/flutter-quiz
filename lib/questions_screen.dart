@@ -38,7 +38,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           children: [
             Text(
               textAlign: TextAlign.center,
-              currentQuestion.text,
+              unescape.convert(currentQuestion.text),
               style: GoogleFonts.lato(
                 color: const Color.fromARGB(255, 201, 153, 251),
                 fontSize: 24,
@@ -50,7 +50,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
             ),
             ...currentQuestion.getShuffledAnswers().map((answer) {
               return AnswerButton(
-                answerText: unescape.convert(answer),
+                answerText: answer,
                 onTap: () {
                   answerQuestion(answer);
                 },
