@@ -7,6 +7,7 @@ import 'package:adv_basics/widgets/answer_button.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:provider/provider.dart';
 
 class QuestionsScreen extends StatefulWidget {
@@ -50,6 +51,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   Widget build(BuildContext context) {
     var currentQuestionIndex =
         Provider.of<QuizProvider>(context, listen: false).currentQuestionIndex;
+    var unescape = HtmlUnescape();
 
     return SizedBox(
       width: double.infinity,
@@ -72,7 +74,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            currentQuestion.question,
+                            unescape.convert(currentQuestion.question),
                             style: GoogleFonts.lato(
                               color: const Color.fromARGB(255, 201, 153, 251),
                               fontSize: 24,

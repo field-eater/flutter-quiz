@@ -4,6 +4,7 @@ import 'package:adv_basics/providers/quiz_provider.dart';
 import 'package:adv_basics/widgets/questions_summary.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:provider/provider.dart';
 
 class ResultsScreen extends StatelessWidget {
@@ -24,6 +25,7 @@ class ResultsScreen extends StatelessWidget {
     List questionsData;
     int numTotalQuestions = 0;
     final List<Map<String, Object>> summary = [];
+    var unescape = HtmlUnescape();
 
     final restartQuiz = Provider.of<QuizProvider>(context).restartQuiz;
 
@@ -41,7 +43,7 @@ class ResultsScreen extends StatelessWidget {
               for (var i = 0; i < numTotalQuestions; i++) {
                 summary.add({
                   'question_index': i,
-                  'question': questionsData[i].question,
+                  'question': unescape.convert(questionsData[i].question),
                   'correct_answer': questionsData[i].correctAnswer,
                   'user_answer': chosenAnswers[i],
                 });
